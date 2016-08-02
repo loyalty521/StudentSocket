@@ -20,6 +20,7 @@ void put_student (STD * head);//输出学号及成绩(欲输出链表头)
 int main(int argc, const char *argv[])
 {
     STD *head;
+    head = (STD *)malloc(sizeof(STD));
     head->sno = 0;
     head->next = NULL;
     int cmd;
@@ -45,11 +46,18 @@ int main(int argc, const char *argv[])
 STD *create_item_student(STD *head)
 {
     STD *p1,*p2;
+    int i=1;//i表示学生数
+    int tempsno;//临时学号
+    int scorearr[5],n;//分数数组,循环值
+    char tempname[9];//临时姓名
+
     p1=head;
     while(p1->next != NULL){
         p1 = p1->next;
     }
+    /*   // 在百度提问的主要是解决这个问题，为什么注释部分的代码不能执行呢。
     p2 = (STD *)malloc(sizeof(STD));
+    p2->next = NULL;
     printf("请输入学号，如果输入负数或0终止读取数据:");
     scanf("%d",&p2->sno);
     while(p2->sno >0)
@@ -65,6 +73,31 @@ STD *create_item_student(STD *head)
         printf("请输入学号，如果输入负数或0终止读取数据:");
         scanf("%d",&p2->sno);
     }
+    */
+    printf("请输入学号，如果输入负数或0终止读取数据:");
+    scanf("%d",&tempsno);
+    while(tempsno > 0){
+        printf("请输入学生姓名:");
+        scanf("%s",tempname);
+        printf("请输入学生成绩(语文,数学,英语,C语言,体育,以逗号分隔):");
+        scanf("%d,%d,%d,%d,%d",&scorearr[0],&scorearr[1],&scorearr[2],&scorearr[3],&scorearr[4]);
+        p1->sno = tempsno;
+        p1->chinese = scorearr[0];
+        p1->math = scorearr[1];
+        p1->english = scorearr[2];
+        p1->clanguage = scorearr[3];
+        p1->sport = scorearr[4];
+        strcpy(p1->name ,tempname);
+        //求总成绩
+        p1->score=scorearr[0]+scorearr[1]+scorearr[2]+scorearr[3]+scorearr[4];
+
+        printf("请输入学号，如果输入负数或0终止读取数据:");       
+        scanf("%d",&tempsno);
+            p1->next = (STD *) malloc(sizeof(STD));//create一个新节点给p1->next
+            p1 = p1->next;//将新节点地址给p1
+            p1->next = NULL;//↑
+    }
+    free(p1);
     return head;
 }
 
