@@ -30,7 +30,6 @@ int main(int argc, const char *argv[])
 {
     STD *head;
     int cmd;
-    int sno;
     head = (STD *)malloc(sizeof(STD));
     head->sno = 0;
     head->next = NULL;
@@ -59,35 +58,24 @@ int main(int argc, const char *argv[])
 //通过学生的学号删除学生的信息
 void del_item_student(STD *head)
 {
-    STD *p,*p1;
-    int sno,i;
+    STD *p,*q;
+    int sno;
     printf("请输入要删除学生的学号：");
     scanf("%d",&sno);
     p=head;
-    /*while(p!=NULL)
-    {
-        p = p->next;
+    while(p != NULL){
         if(p->sno == sno)
-        {
-            p1 = p;
-            p->next = p1->next;
-            free(p1);
-            printf("删除学生信息成功\n");
-            return;
-        }
+            break;
+        q = p;
+        p=p->next;
     }
-    printf("没有找到相应的学号删除失败\n");
-*/
-for(i=1;i<sno&&p->next !=NULL;i++)
-    p=p->next;
-if(p->next ==NULL){
-    printf("没有找到相应的学号删除失败\n");
-    return;
-}
-p1 = p->next;
-p->next = p1->next;
-free(p1);
-            printf("删除学生信息成功\n");
+    if(p->next ==NULL){
+        printf("没有找到相应的学号删除失败\n");
+        return;
+    }
+    q->next = p->next;
+    free(p);
+    printf("删除学生信息成功\n");
 
 }
 //判断指定学号是否存在

@@ -3,9 +3,6 @@
 
 CC = $(CROSS_COMPILE)gcc
 
-ifdef CROSS_COMPILE
-	TARGET = /opt/filesystem
-endif
 
 DEBUG = -g -O0 -Wall
 
