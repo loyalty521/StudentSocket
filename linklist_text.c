@@ -67,7 +67,7 @@ STD *create_item_student(STD *head)
         printf("请输入学生成绩(语文,数学,英语,C语言,体育,以逗号分隔):");
         scanf("%d,%d,%d,%d,%d",&p2->chinese,&p2->math,&p2->english,&p2->clanguage,&p2->sport);
         p2->score = p2->chinese + p2->math + p2->english + p2->clanguage + p2->sport;
-        p1->next = p2;
+        p2->next = p1;
         p1 = p2;
         p2 = (STD *)malloc(sizeof(STD));
         printf("请输入学号，如果输入负数或0终止读取数据:");
@@ -101,17 +101,9 @@ STD *create_item_student(STD *head)
     return head;
 }
 
-void put_student (struct student * head)//输出学号及成绩(欲输出链表头)
+void put_student (STD * head)//输出学号及成绩(欲输出链表头)
 {
-    struct student *pstudent = head;
-    struct student zcj;//总成绩
-    int student_num = 0;//学生人数
-
-    zcj.chinese = 0;
-    zcj.clanguage  = 0;
-    zcj.english = 0;
-    zcj.math = 0;
-    zcj.sport = 0;
+    STD *pstudent = head;
 
     printf (" --------------\n");
     printf ("|某班学生成绩表|\n");
@@ -122,25 +114,8 @@ void put_student (struct student * head)//输出学号及成绩(欲输出链表�
     do {
             printf("%-8d%-8s%-8d%-8d%-8d%-9d%-8d%-10d%-12d\n",pstudent->sno,pstudent->name ,pstudent->chinese,pstudent->math,
                     pstudent->english,pstudent->clanguage,pstudent->sport,pstudent->score, pstudent->score / 5);
-            zcj.chinese = zcj.chinese + pstudent->chinese ;//计算各科总成绩
-            zcj.clanguage = zcj.clanguage + pstudent->clanguage ;
-            zcj.english = zcj.english + pstudent->english ;
-            zcj.math = zcj.math + pstudent->math ;
-            zcj.sport = zcj.sport + pstudent->sport ;
-            student_num++;//记录总学生人数,表示链表不为空:
             pstudent=pstudent->next;
-    }while(pstudent->next!=NULL && pstudent->math >= 0 && pstudent->math <= 150);
-    printf (" --------------\n");
-    if (student_num >= 1)//判断链表是否为空
-    {
-    printf (" --------------\n");
-        printf ("\n\n[总平均成绩]:(语文:%d,数学:%d,英语:%d,C语言:%d,体育:%d)\n",zcj.chinese/student_num, zcj.math / student_num,
-                zcj.english / student_num, zcj.clanguage / student_num , zcj.sport / student_num);//输出总平均成绩
-    }else
-    {
-        printf ("没有可以输出列表!\n\n");
-    }
-
+    }while(pstudent->next!=NULL);
 }
 
 
