@@ -20,10 +20,10 @@ void put_student (STD * head);//输出学号及成绩(欲输出链表头)
 int main(int argc, const char *argv[])
 {
     STD *head;
+    int cmd;
     head = (STD *)malloc(sizeof(STD));
     head->sno = 0;
     head->next = NULL;
-    int cmd;
     while(cmd != 8){
         printf("①添加学生\n②显示成绩列表\n③删除学生\n④排序\n⑤保存数据\n⑥读取数据\n⑦修改\n⑧退出系统\n\n");
         printf("等待输入命令:");
@@ -46,9 +46,8 @@ int main(int argc, const char *argv[])
 STD *create_item_student(STD *head)
 {
     STD *p1,*p2;
-    int i=1;//i表示学生数
     int tempsno;//临时学号
-    int scorearr[5],n;//分数数组,循环值
+    int scorearr[5];//分数数组,循环值
     char tempname[9];//临时姓名
 
     p1=head;
