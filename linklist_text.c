@@ -2,6 +2,11 @@
 #include <string.h>
 #include <stdlib.h>
 
+#define bool int
+#define true 1
+#define false 0
+#define DATAFILE "DATAFILE.WL"//数据保存文件名
+
 typedef struct student {     //定义链表数据结构
     int sno;           //学号
     char name[9];     //姓名
@@ -14,13 +19,18 @@ typedef struct student {     //定义链表数据结构
     struct student *next;
 }STD;
 
-STD * create_item_student (STD * head);//向指定的链表添加学生,并返回链表头
+void create_item_student (STD * head);//向指定的链表添加学生,并返回链表头
 void put_student (STD * head);//输出学号及成绩(欲输出链表头)
+bool is_sno(STD *head,int sno);//判断指定学号是否存在
+bool is_socre(int socre);//判断成绩合法性
+void del_item_student(STD *head);//通过学生的学号删除学生的信息
+
 
 int main(int argc, const char *argv[])
 {
     STD *head;
     int cmd;
+    int sno;
     head = (STD *)malloc(sizeof(STD));
     head->sno = 0;
     head->next = NULL;
@@ -30,78 +40,119 @@ int main(int argc, const char *argv[])
         scanf("%d",&cmd);
         switch(cmd){
         case 1:
-            head = create_item_student(head);
+            create_item_student(head);
             break;
         case 2:
             put_student(head);
-            exit(0);
+            break;
+        case 3:
+            del_item_student(head);
             break;
         case 8:
+            exit(0);
             break;
         }
     }
     return 0;
 }
 
-STD *create_item_student(STD *head)
+//通过学生的学号删除学生的信息
+void del_item_student(STD *head)
+{
+    STD *p,*p1;
+    int sno,i;
+    printf("请输入要删除学生的学号：");
+    scanf("%d",&sno);
+    p=head;
+    /*while(p!=NULL)
+    {
+        p = p->next;
+        if(p->sno == sno)
+        {
+            p1 = p;
+            p->next = p1->next;
+            free(p1);
+            printf("删除学生信息成功\n");
+            return;
+        }
+    }
+    printf("没有找到相应的学号删除失败\n");
+*/
+for(i=1;i<sno&&p->next !=NULL;i++)
+    p=p->next;
+if(p->next ==NULL){
+    printf("没有找到相应的学号删除失败\n");
+    return;
+}
+p1 = p->next;
+p->next = p1->next;
+free(p1);
+            printf("删除学生信息成功\n");
+
+}
+//判断指定学号是否存在
+bool is_sno(STD *head,int sno)
+{
+    STD *p;
+    p=head;
+    while(p!=NULL)
+    {
+        if(p->sno == sno)
+        {
+            return false;
+        }
+        p = p->next;
+    }
+    return true;
+}
+//判断成绩合法性
+bool is_socre(int socre)
+{
+    if(socre>0 && socre<150)
+        return true;
+    else
+        return false;
+}
+
+//向指定的链表添加学生,并返回链表头
+void create_item_student(STD *head)
 {
     STD *p1,*p2;
-    int tempsno;//临时学号
-    int scorearr[5];//分数数组,循环值
-    char tempname[9];//临时姓名
-
     p1=head;
     while(p1->next != NULL){
         p1 = p1->next;
     }
-     // 在百度提问的主要是解决这个问题，为什么注释部分的代码不能执行呢。
     p2 = (STD *)malloc(sizeof(STD));
     p2->next = NULL;
     printf("请输入学号，如果输入负数或0终止读取数据:");
     scanf("%d",&p2->sno);
     while(p2->sno >0)
     {
-        printf("请输入学生姓名:");
-        scanf("%s",p2->name);
-        printf("请输入学生成绩(语文,数学,英语,C语言,体育,以逗号分隔):");
-        scanf("%d,%d,%d,%d,%d",&p2->chinese,&p2->math,&p2->english,&p2->clanguage,&p2->sport);
-        p2->score = p2->chinese + p2->math + p2->english + p2->clanguage + p2->sport;
-        p1->next = p2;
-        p1 = p2;
-        p2 = (STD *)malloc(sizeof(STD));
-        p2->next=NULL;
+        if(is_sno(head,p2->sno) != 0)
+        {
+            printf("请输入学生姓名:");
+            scanf("%s",p2->name);
+            printf("请输入学生成绩(语文,数学,英语,C语言,体育,以逗号分隔):");
+            scanf("%d,%d,%d,%d,%d",&p2->chinese,&p2->math,&p2->english,&p2->clanguage,&p2->sport);
+            if( is_socre(p2->chinese)!=0 && is_socre(p2->math)!=0 && is_socre(p2->english)!=0 && is_socre(p2->clanguage)!=0 && is_socre(p2->sport) != 0){
+                p2->score = p2->chinese + p2->math + p2->english + p2->clanguage + p2->sport;
+                p1->next = p2;
+                p1 = p2;
+                p2 = (STD *)malloc(sizeof(STD));
+                p2->next=NULL;
+            }
+            else
+                printf("输入的成绩不合法，请重新录入学生信息\n");
+        }
+        else
+            printf("输入的学号已存在,请重新输入！\n");
         printf("请输入学号，如果输入负数或0终止读取数据:");
         scanf("%d",&p2->sno);
     }
-    /*
-    printf("请输入学号，如果输入负数或0终止读取数据:");
-    scanf("%d",&tempsno);
-    while(tempsno > 0){
-        printf("请输入学生姓名:");
-        scanf("%s",tempname);
-        printf("请输入学生成绩(语文,数学,英语,C语言,体育,以逗号分隔):");
-        scanf("%d,%d,%d,%d,%d",&scorearr[0],&scorearr[1],&scorearr[2],&scorearr[3],&scorearr[4]);
-        p1->sno = tempsno;
-        p1->chinese = scorearr[0];
-        p1->math = scorearr[1];
-        p1->english = scorearr[2];
-        p1->clanguage = scorearr[3];
-        p1->sport = scorearr[4];
-        strcpy(p1->name ,tempname);
-        //求总成绩
-        p1->score=scorearr[0]+scorearr[1]+scorearr[2]+scorearr[3]+scorearr[4];
-
-        printf("请输入学号，如果输入负数或0终止读取数据:");       
-        scanf("%d",&tempsno);
-            p1->next = (STD *) malloc(sizeof(STD));//create一个新节点给p1->next
-            p1 = p1->next;//将新节点地址给p1
-            p1->next = NULL;//↑
-    }
-    free(p1);*/
-    return head;
 }
 
-void put_student (STD * head)//输出学号及成绩(欲输出链表头)
+//输出学号及成绩(欲输出链表头)
+void put_student (STD * head)
 {
     STD *pstudent = head->next;
 
