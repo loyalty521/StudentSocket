@@ -54,7 +54,7 @@ STD *create_item_student(STD *head)
     while(p1->next != NULL){
         p1 = p1->next;
     }
-    /*   // 在百度提问的主要是解决这个问题，为什么注释部分的代码不能执行呢。
+     // 在百度提问的主要是解决这个问题，为什么注释部分的代码不能执行呢。
     p2 = (STD *)malloc(sizeof(STD));
     p2->next = NULL;
     printf("请输入学号，如果输入负数或0终止读取数据:");
@@ -66,13 +66,14 @@ STD *create_item_student(STD *head)
         printf("请输入学生成绩(语文,数学,英语,C语言,体育,以逗号分隔):");
         scanf("%d,%d,%d,%d,%d",&p2->chinese,&p2->math,&p2->english,&p2->clanguage,&p2->sport);
         p2->score = p2->chinese + p2->math + p2->english + p2->clanguage + p2->sport;
-        p2->next = p1;
+        p1->next = p2;
         p1 = p2;
         p2 = (STD *)malloc(sizeof(STD));
+        p2->next=NULL;
         printf("请输入学号，如果输入负数或0终止读取数据:");
         scanf("%d",&p2->sno);
     }
-    */
+    /*
     printf("请输入学号，如果输入负数或0终止读取数据:");
     scanf("%d",&tempsno);
     while(tempsno > 0){
@@ -96,13 +97,13 @@ STD *create_item_student(STD *head)
             p1 = p1->next;//将新节点地址给p1
             p1->next = NULL;//↑
     }
-    free(p1);
+    free(p1);*/
     return head;
 }
 
 void put_student (STD * head)//输出学号及成绩(欲输出链表头)
 {
-    STD *pstudent = head;
+    STD *pstudent = head->next;
 
     printf (" --------------\n");
     printf ("|某班学生成绩表|\n");
@@ -110,11 +111,11 @@ void put_student (STD * head)//输出学号及成绩(欲输出链表头)
     printf (" ----    ----    ----    ----    ----    -----    ----    ------    --------\n");
     printf ("|学号|  |姓名|  |语文|  |数学|  |英语|  |C语言|  |体育|  |总成绩|  |平均成绩|\n");
     printf (" ----    ----    ----    ----    ----    -----    ----    ------    --------\n");//8,8,8,8,9,8,10,12
-    do {
-            printf("%-8d%-8s%-8d%-8d%-8d%-9d%-8d%-10d%-12d\n",pstudent->sno,pstudent->name ,pstudent->chinese,pstudent->math,
+    while(pstudent!=NULL){ 
+        printf("%-8d%-8s%-8d%-8d%-8d%-9d%-8d%-10d%-12d\n",pstudent->sno,pstudent->name ,pstudent->chinese,pstudent->math,
                     pstudent->english,pstudent->clanguage,pstudent->sport,pstudent->score, pstudent->score / 5);
             pstudent=pstudent->next;
-    }while(pstudent->next!=NULL);
+    }
 }
 
 
