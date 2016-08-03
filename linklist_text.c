@@ -24,7 +24,7 @@ void put_student (STD * head);//输出学号及成绩(欲输出链表头)
 bool is_sno(STD *head,int sno);//判断指定学号是否存在
 bool is_socre(int socre);//判断成绩合法性
 void del_item_student(STD *head);//通过学生的学号删除学生的信息
-
+void change_student(STD *head);//通过学号修改学生信息。
 
 int main(int argc, const char *argv[])
 {
@@ -47,6 +47,9 @@ int main(int argc, const char *argv[])
         case 3:
             del_item_student(head);
             break;
+        case 7:
+            change_student(head);
+            break;
         case 8:
             exit(0);
             break;
@@ -55,16 +58,52 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
+void change_student(STD *head)//通过学号修改学生信息。
+{
+    STD *p;
+    int sno;
+    p=head;
+    int str[5];
+    char name[20];
+    printf("请输入要修改学生的学号：");
+    scanf("%d",&sno);
+    while(p->next != NULL){
+        if(p->sno == sno)
+            break;
+        p=p->next;
+    }
+    if(p->next ==NULL){
+        printf("没有找到相应的学号修改失败\n");
+        return;
+    }
+    p->sno = sno;
+    printf("请输入学生姓名:");
+    scanf("%s",name);
+    printf("请输入学生成绩(语文,数学,英语,C语言,体育,以逗号分隔):");
+    scanf("%d,%d,%d,%d,%d",&str[0],&str[1],&str[2],&str[3],&str[4]);
+    if( is_socre(str[0])!=0 && is_socre(str[1])!=0 && is_socre(str[2])!=0 && is_socre(str[3])!=0 && is_socre(str[4])!=0 )
+    {
+        p->score = str[0]+str[1]+str[2]+str[3]+str[4];
+        p->chinese = str[0];
+        p->math = str[1];
+        p->english = str[2];
+        p->clanguage = str[3];
+        p->sport = str[4];
+        strcpy(p->name,name);
+    }
+    else
+        printf("输入的成绩不合法，修改失败\n");
+}
 //通过学生的学号删除学生的信息
 void del_item_student(STD *head)
 {
     STD *p,*q;
     int sno;
     printf("请输入要删除学生的学号：");
-    scanf("%d",&sno);
-    p=head;
-    while(p != NULL){
-        if(p->sno == sno)
+            scanf("%d",&sno);
+            p=head;
+            while(p != NULL){
+                if(p->sno == sno)
             break;
         q = p;
         p=p->next;
