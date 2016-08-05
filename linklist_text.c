@@ -1,8 +1,90 @@
 #include "linklist_text.h"
 
+//交换数据
+void swap(STD *p1,STD *p2)
+{
+    STD *tmp = (STD *)malloc(sizeof(STD));
+    /*
+    tmp->next = p1->next;
+    tmp = p1;
+    p1->next = p2->next;
+    p1 = p2;
+    p2->next = tmp->next;
+    p2 = tmp;
+    free(tmp);
+    */
+    tmp->sno = p1->sno;
+    strcpy( tmp->name, p1->name);
+    tmp->chinese = p1->chinese;
+    tmp->math = p1->math;
+    tmp->english = p1->english;
+    tmp->clanguage = p1->clanguage;
+    tmp->sport = p1->sport;
+    tmp->score = p1->score;
+    
+    p1->sno = p2->sno;
+    strcpy( p1->name, p2->name);
+    p1->chinese = p2->chinese;
+    p1->math = p2->math;
+    p1->english = p2->english;
+    p1->clanguage = p2->clanguage;
+    p1->sport = p2->sport;
+    p1->score = p2->score;
+    
+    p2->sno = tmp->sno;
+    strcpy( p2->name, tmp->name);
+    p2->chinese = tmp->chinese;
+    p2->math = tmp->math;
+    p2->english = tmp->english;
+    p2->clanguage = tmp->clanguage;
+    p2->sport = tmp->sport;
+    p2->score = tmp->score;
+}
+//按学号排序
 void order_sno(STD *head)
 {
-
+    STD *p1,*p2;
+    int sno;
+    p1 = p2 = (STD *)malloc(sizeof(STD));
+    p1 = head->next;
+    while(p1!=NULL)
+    {
+        sno = p1->sno;
+        p2 = p1->next;
+        while(p2!=NULL)
+        {
+            if(sno > (p2->sno))
+            {
+                swap(p1,p2);
+                sno = p2->sno;
+            }
+            p2 = p2->next;
+        }
+        p1 = p1->next;
+    }
+}
+//按成绩排序
+void order_score(STD *head)
+{
+    STD *p1,*p2;
+    int score;
+    p1 = p2 = (STD *)malloc(sizeof(STD));
+    p1 = head->next;
+    while(p1!=NULL)
+    {
+        score = p1->score;
+        p2 = p1->next;
+        while(p2!=NULL)
+        {
+            if(score < (p2->score))
+            {
+                swap(p1,p2);
+                score = p2->score;
+            }
+            p2 = p2->next;
+        }
+        p1 = p1->next;
+    }
 }
 void order(STD *head)
 {
@@ -24,7 +106,7 @@ void order(STD *head)
             order_sno(head);
         }
         else{
-//            order_score(head);
+            order_score(head);
         }
     }
 }
@@ -121,7 +203,7 @@ void change_student(STD *head)//通过学号修改学生信息。
         p->clanguage = str[3];
         p->sport = str[4];
         strcpy(p->name,name);
-        printf("修改学号为 %d 的学生信息，修改成功！",sno);
+        printf("修改学号为 %d 的学生信息，修改成功！\n",sno);
     }
     else
         printf("输入的成绩不合法，修改失败\n");
@@ -184,12 +266,12 @@ void create_item_student(STD *head)
 {
     STD *p1,*p2;
     int flag = 0;
+    p2 = p1 = (STD *)malloc(sizeof(STD));
+    p2->next = NULL;
     p1=head;
     while(p1->next != NULL){
         p1 = p1->next;
     }
-    p2 = (STD *)malloc(sizeof(STD));
-    p2->next = NULL;
     while(flag != 1)
     {
         printf("请输入学号，如果输入负数或0终止读取数据:");

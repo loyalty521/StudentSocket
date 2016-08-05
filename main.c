@@ -8,18 +8,17 @@ int main(int argc, const char *argv[])
     STD *head;
     int cmd,flag =0;
     head = (STD *)malloc(sizeof(STD));
-    head->sno = 0;
-    head->next = NULL;
     while(cmd != 8 )
     {
+        flag = 0;
         while(flag != 1)
         {
-        printf("①添加学生\n②显示成绩列表\n③删除学生\n④排序\n⑤保存数据\n⑥读取数据\n⑦修改\n⑧退出系统\n\n");
-        printf("等待输入命令:");
-        flag = scanf("%d",&cmd);
-        __fflush();
-        if(flag != 1)
-            printf("输入命令错误！请重新输入\n");
+            printf("①添加学生\n②显示成绩列表\n③删除学生\n④排序\n⑤保存数据\n⑥读取数据\n⑦修改\n⑧退出系统\n\n");
+            printf("等待输入命令:");
+            flag = scanf("%d",&cmd);
+            __fflush();
+            if(flag != 1)
+                printf("输入命令错误！请重新输入\n");
         }
         switch(cmd){
             case 1:
