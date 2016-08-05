@@ -8,23 +8,29 @@
 #define DATAFILE "DATAFILE.WL"//数据保存文件名
 
 typedef struct student {     //定义链表数据结构
-    int sno;           //学号
-    char name[9];     //姓名
-    int chinese;      //语文
-    int math;          //数学
-    int english;       //英语
-    int clanguage;      //C语言
-    int sport;           //体育
-    int score;           //总成绩
+    int sno;                 //学号
+    char name[9];            //姓名
+    int chinese;             //语文
+    int math;                //数学
+    int english;             //英语
+    int clanguage;           //C语言
+    int sport;               //体育
+    int score;               //总成绩
     struct student *next;
 }STD;
 
-void create_item_student (STD * head);//向指定的链表添加学生,并返回链表头
-void put_student (STD * head);//输出学号及成绩(欲输出链表头)
-bool is_sno(STD *head,int sno);//判断指定学号是否存在
-bool is_socre(int socre);//判断成绩合法性
-void del_item_student(STD *head);//通过学生的学号删除学生的信息
-void change_student(STD *head);//通过学号修改学生信息。
+void create_item_student (STD * head);  //向指定的链表添加学生,并返回链表头
+void put_student (STD * head);          //输出学号及成绩(欲输出链表头)
+bool is_sno(STD *head,int sno);         //判断指定学号是否存在
+bool is_socre(int socre);               //判断成绩合法性
+void del_item_student(STD *head);       //通过学生的学号删除学生的信息
+void change_student(STD *head);         //通过学号修改学生信息。
+STD *read_data();                       //从文件中读取数据到链表
+void save_data(STD *head);              //保存链表内的数据到文件
+void order(STD *head);                  //排序
+void order_sno(STD *head);              //按学号排序
+void order_score(STD *head);            //按成绩排序
+
 
 int main(int argc, const char *argv[])
 {
@@ -47,6 +53,15 @@ int main(int argc, const char *argv[])
         case 3:
             del_item_student(head);
             break;
+        case 4:
+            order(head);
+            break;
+        case 5:
+            save_data(head);
+            break;
+        case 6:
+            head = read_data();
+            break;
         case 7:
             change_student(head);
             break;
@@ -56,6 +71,65 @@ int main(int argc, const char *argv[])
         }
     }
     return 0;
+}
+void order_sno(STD *head)
+{
+
+}
+void order(STD *head)
+{
+    int cmd;
+    printf("请输入排序方式，1按学号排序，2按成绩排序:");
+    scanf("%d",&cmd);
+    if(cmd !=1 && cmd !=2)
+        printf("输入错误\n");
+    else
+    {
+        if(cmd == 1) {
+            order_sno(head);
+        }
+        else{
+            order_score(head);
+        }
+    }
+}
+
+void save_data(STD *head)
+{
+    STD *data;
+    FILE *p = fopen(DATAFILE,"wb");
+    data = head->next;
+    while(data != NULL)
+    {
+        fwrite(data,sizeof(STD),1,p);
+        data = data->next;
+    }
+    printf("文件保存完成\n");
+    fclose(p);
+}
+
+STD *read_data()
+{
+    STD *head,*p;
+    FILE *file = fopen(DATAFILE,"rb");
+    head = (STD *)malloc(sizeof(STD));
+    p=head;
+    while(!feof(file))
+    {
+        STD *newhead = (STD *)malloc(sizeof(STD));
+        memset(newhead,0,sizeof(newhead));
+        fread(newhead,sizeof(STD),1,file);
+        if(feof(file))
+        {
+            p->next = NULL;
+            break;
+        }
+        p->next = newhead;
+        p=newhead;
+        p->next = NULL;
+    }
+    fclose(file);
+    return head;
 }
 
 void change_student(STD *head)//通过学号修改学生信息。
@@ -67,12 +141,12 @@ void change_student(STD *head)//通过学号修改学生信息。
     char name[20];
     printf("请输入要修改学生的学号：");
     scanf("%d",&sno);
-    while(p->next != NULL){
+    while(p != NULL){
         if(p->sno == sno)
             break;
         p=p->next;
     }
-    if(p->next ==NULL){
+    if(p ==NULL){
         printf("没有找到相应的学号修改失败\n");
         return;
     }
@@ -90,6 +164,7 @@ void change_student(STD *head)//通过学号修改学生信息。
         p->clanguage = str[3];
         p->sport = str[4];
         strcpy(p->name,name);
+        printf("修改学号为 %d 的学生信息，修改成功！",sno);
     }
     else
         printf("输入的成绩不合法，修改失败\n");
@@ -100,10 +175,10 @@ void del_item_student(STD *head)
     STD *p,*q;
     int sno;
     printf("请输入要删除学生的学号：");
-            scanf("%d",&sno);
-            p=head;
-            while(p != NULL){
-                if(p->sno == sno)
+    scanf("%d",&sno);
+    p=head;
+    while(p != NULL){
+        if(p->sno == sno)
             break;
         q = p;
         p=p->next;
