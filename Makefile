@@ -1,22 +1,30 @@
 
-#CROSS_COMPILE = arm-linux-gnu-
+#CROSSCOMPILE=/opt/gcc-linaro-2013.03/bin/arm-linux-gnueabihf-
+#CROSSCOMPILE=/opt/arm-2014.05/bin/arm-none-linux-gnueabi-
+CC=$(CROSSCOMPILE)gcc
+CXX=$(CROSSCOMPILE)g++
+STRIP=$(CROSSCOMPILE)strip
+AR=$(CROSSCOMPILE)ar
 
-CC = $(CROSS_COMPILE)gcc
+OBJS=main.o 
+LIBOBJS=linklist_text.o
+LIBCANPROTO=liblinklist_text.a
+EXEC=ctest
+CFLAGS += -Wall -O2 -D_GNU_SOURCE
 
+.PHONY:tags
+all:$(EXEC)
+	$(STRIP) -s $(EXEC) -o $(EXEC).strip
+#	cp $(EXEC) /tftpboot/filesys-firecbox/home/. -f
 
-DEBUG = -g -O0 -Wall
+$(EXEC):$(OBJS) $(LIBCANPROTO)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS) -lpthread 
 
-CFLAGS += $(DEBUG)
+$(LIBCANPROTO):$(LIBOBJS)
+	$(AR) rc $@ $^
 
-PROGS = ${patsubst %.c, %, ${wildcard *.c}} 
+clean:
+	rm $(OBJS) $(EXEC) $(EXEC).strip $(LIBOBJS)  $(LIBCANPROTO) -f
 
-all : $(PROGS)
-
-% : %.c
-	$(CC)  $(CFLAGS)  $< -o $@
-
-.PHONY: clean 
-
-clean : 
-		- rm -f $(PROGS) core *.gz
-
+tags:
+	ctags *.[ch] *.cpp
