@@ -39,6 +39,8 @@ void swap(STD *p1,STD *p2)
     p2->clanguage = tmp->clanguage;
     p2->sport = tmp->sport;
     p2->score = tmp->score;
+    
+    free(tmp);
 }
 //按学号排序
 void order_sno(STD *head)
@@ -221,14 +223,16 @@ void del_item_student(STD *head)
         if(flag != 1)
             printf("输入学号错误，请从新输入学号：");
     }
-    p=head;
-    while(p->next != NULL){
-        if(p->sno == sno)
+    p=head->next;
+    while(p != NULL){
+        if(p->sno == sno){
+            flag = 2;
             break;
+        }
         q = p;
         p=p->next;
     }
-    if(p->next ==NULL){
+    if(flag != 2){
         printf("没有找到相应的学号删除失败\n");
         return;
     }
@@ -241,7 +245,7 @@ void del_item_student(STD *head)
 bool is_sno(STD *head,int sno)
 {
     STD *p;
-    p=head;
+    p=head->next;
     while(p!=NULL)
     {
         if(p->sno == sno)

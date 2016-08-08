@@ -10,7 +10,7 @@ OBJS=main.o
 LIBOBJS=linklist_text.o
 LIBCANPROTO=liblinklist_text.a
 EXEC=ctest
-CFLAGS += -Wall -O2 -D_GNU_SOURCE
+CFLAGS += -g -Wall -O2 -D_GNU_SOURCE
 
 .PHONY:tags
 all:$(EXEC)

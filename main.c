@@ -46,5 +46,6 @@ int main(int argc, const char *argv[])
                 break;
         }
     }
+    free(head);
     return 0;
 }
