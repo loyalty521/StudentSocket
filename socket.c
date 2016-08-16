@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-
+#include <string.h>
 #define WEB_ROOT "/var"
 #define DEFAULT_PAGE "/index.html"
 
@@ -92,7 +92,8 @@ void start(){
 				if(size <=2 )break;
 
 				//GET /a.html HTTP/1.1\r\n拆分字符串获得a.html
-				if(strncasecmp("GET",buf,3)==0 || strncasecmp("POST")==0){
+				//if(strncasecmp("GET",buf,3)==0 || strncasecmp("POST")==0){
+				if(strncasecmp("GET",buf,3)==0){
 					char *p = strchr(buf,' ');//extern char *strchr(const char *s,char c);查找字符串s中首次出现字符c的位置
 					if(p){
 						++p;
